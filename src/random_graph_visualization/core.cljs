@@ -20,18 +20,20 @@
   (-> js/d3 .-layout
       (.force)
       (.charge -120)
-      (.linksDistance 30)
+      (.linkDistance 30)
       (.size (array width height))))
 
 (defn create-svg
   [width height]
   (-> js/d3
-      (.select "#force svg")
-      (.attr {:width width
-              :height height})))
+      (.select "body")
+      (.append "svg")
+      (.attr "width" width) 
+      (.attr "height" height)
+      (.append "g")))
 
 (defn start-force-layout
-  [force-layout graph]
+  [force graph]
   (-> force
       (.nodes (clj->js (:nodes graph)))
       (.links (clj->js (:edges graph)))
@@ -55,8 +57,8 @@
       (.enter)
       (.append "circle")
       (.attr "class" "node")
-      (.attr {:r 5
-              :data-n #(:id %)})
+      (.attr "r" 5)
+      (.attr "data-n" #(:id %))
       (.style "fill" "cyan")
       (.call (aget force "drag"))))
 
@@ -64,20 +66,20 @@
   [edge node]
   (fn []
     (-> edge
-        (.attr {:x1 #(-> % .-source .-x)
-                :y1 #(-> % .-source .-y)
-                :x2 #(-> % .-target .-x)
-                :y2 #(-> % .-target .-y)}))
+        (.attr "x1" #(-> % .-source .-x))
+        (.attr "y1" #(-> % .-source .-y))
+        (.attr "x2" #(-> % .-target .-x))
+        (.attr "y2" #(-> % .-target .-y)))
     (-> node
-        (.attr {:cx #(aget % "x")
-                :cy #(aget % "y")}))))
+        (.attr "cx" #(aget % "x"))
+        (.attr "cy" #(aget % "y")))))
 
 (defn render-graph
-  [force-layout svg graph]
+  [force svg graph]
   (start-force-layout force graph)
   (let [edges (create-edges svg graph)
         nodes (create-nodes svg force graph)]
-    ((.on force "tick" (on-tick-handler edges nodes)))))
+    (.on force "tick" (on-tick-handler edges nodes))))
 
 (let [width 650
       height 500]

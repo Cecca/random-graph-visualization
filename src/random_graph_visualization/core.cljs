@@ -1,5 +1,6 @@
 (ns random-graph-visualization.core
-  (:require [random-graph-visualization.render :refer [render-graph
+  (:require [random-graph-visualization.graph :refer [graph-gnp]]
+            [random-graph-visualization.render :refer [render-graph
                                                        create-force-layout
                                                        create-svg]]))
 
@@ -18,9 +19,14 @@
            {"source" 0 "target" 3}
            {"source" 0 "target" 4}]})
 
+(def rnd-graph
+  (graph-gnp 100 0.013))
+
+(println rnd-graph)
+
 (let [width 650
       height 500]
   (render-graph
    (create-force-layout width height)
    (create-svg width height)
-   test-graph))
+   rnd-graph))

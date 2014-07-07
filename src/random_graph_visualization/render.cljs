@@ -1,6 +1,5 @@
 (ns random-graph-visualization.render)
 
-
 (defn create-force-layout
   [width height]
   (-> js/d3 .-layout

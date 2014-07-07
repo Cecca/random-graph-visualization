@@ -12,7 +12,7 @@
 (def app-state (atom {:graph {:nodes []
                               :links []}
                       :avg-deg 0.0
-                      :num-nodes 0}))
+                      :num-nodes 2}))
 
 (comment
   (def rnd-graph
@@ -31,8 +31,14 @@
     om/IRenderState
     (render-state [this {:keys [val]}]
       (dom/p nil
-             (str "The value is " val)
-             (slider :val owner)))))
+             (dom/p nil (str "The slider value is " val))
+             (dom/p nil (str "The average degree is " (:avg-deg data)))
+             (slider :val owner
+                     :step nil ; continuous
+                     :max (dec (:num-nodes data)))))
+    om/IDidUpdate
+    (did-update [this prev-props prev-state]
+      (om/update! data [:avg-deg] (:val prev-state)))))
 
 (om/root slider-widget app-state
   {:target (. js/document (getElementById "slider"))})

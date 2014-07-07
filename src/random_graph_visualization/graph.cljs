@@ -12,3 +12,6 @@
     {:nodes nodes
      :links edges}))
 
+(defn poisson-graph
+  [n c]
+  (graph-gnp n (/ c (dec n))))

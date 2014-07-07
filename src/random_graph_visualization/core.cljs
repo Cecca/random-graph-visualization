@@ -8,24 +8,13 @@
 
 (def app-state (atom {}))
 
-(def test-graph
-  {:nodes [{:id 0}
-           {:id 1}
-           {:id 2}
-           {:id 3}
-           {:id 4}]
-   :links [{"source" 0 "target" 1}
-           {"source" 0 "target" 2}
-           {"source" 0 "target" 3}
-           {"source" 0 "target" 4}]})
-
 (def rnd-graph
-  (graph-gnp 100 0.013))
+  (graph-gnp 100 0.01))
 
 (println rnd-graph)
 
-(let [width 650
-      height 500]
+(let [width 800
+      height 700]
   (render-graph
    (create-force-layout width height)
    (create-svg width height)

@@ -21,6 +21,7 @@
       (.attr "width" (+ (:left margin) width (:right margin))) 
       (.attr "height" (+ (:bottom margin) height (:top margin)))
       (.append "g")
+      (.attr "id" "drawing-area")
       (.attr "transform"
              (str "translate(" (:left margin) "," (:top margin) ")"))))
 
@@ -69,6 +70,7 @@
 (defn render-graph
   [force svg graph]
   (let [json-graph (clj->js graph)]
+    (println graph)
     (start-force-layout force json-graph)
     (let [links (create-links svg json-graph)
           nodes (create-nodes svg force json-graph)]

@@ -1,5 +1,5 @@
 (ns random-graph-visualization.core
-  (:require [random-graph-visualization.graph :refer [graph-gnp]]
+  (:require [random-graph-visualization.graph :refer [graph-gnp poisson-graph]]
             [random-graph-visualization.render :refer [render-graph
                                                        create-force-layout
                                                        create-svg]]
@@ -11,8 +11,7 @@
 
 (enable-console-print!)
 
-(def app-state (atom {:graph {:nodes []
-                              :links []}
+(def app-state (atom {:graph (poisson-graph 10 2)
                       :avg-deg 0.0
                       :num-nodes 100}))
 
@@ -52,13 +51,22 @@
   (reify
     om/IWillMount
     (will-mount [this]
-      nil)
+      (create-svg 800 700)
+      (render-graph
+       (create-force-layout 800 700)
+       (.select js/d3 "#drawing-area")
+       (:graph state)))
     om/IRender
     (render [this]
-      (dom/p nil "ciao"))
+      (dom/div nil (str "Average degree is " (:avg-deg state))))
     om/IDidUpdate
     (did-update [this prev-props prev-state]
-      nil)))
+      (comment)
+      (println "Updating graph")
+      (render-graph
+       (create-force-layout 800 700)
+       (.select js/d3 "#drawing-area")
+       (:graph prev-props)))))
 
 (om/root visualization-widget app-state
   {:target (. js/document (getElementById "visualization"))})

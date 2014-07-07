@@ -6,12 +6,13 @@
 
 (enable-console-print!)
 
-(def app-state (atom {}))
+(def app-state (atom {:graph {:nodes []
+                              :links []}
+                      :avg-deg 0.0
+                      :num-nodes 0}))
 
 (def rnd-graph
-  (graph-gnp 100 0.01))
-
-(println rnd-graph)
+  (graph-gnp 10 0.1))
 
 (let [width 800
       height 700]

@@ -12,7 +12,7 @@
 (def app-state (atom {:graph {:nodes []
                               :links []}
                       :avg-deg 0.0
-                      :num-nodes 2}))
+                      :num-nodes 100}))
 
 (comment
   (def rnd-graph
@@ -28,13 +28,15 @@
 (defn slider-widget
   [data owner]
   (reify
+    om/IWillMount
+    (will-mount [_]
+      nil)
     om/IRenderState
     (render-state [this {:keys [val]}]
       (dom/p nil
-             (dom/p nil (str "The slider value is " val))
-             (dom/p nil (str "The average degree is " (:avg-deg data)))
+             (dom/p nil (str "Average degree: " (:avg-deg data)))
              (slider :val owner
-                     :step nil ; continuous
+                     :step nil ; continuous 
                      :max (dec (:num-nodes data)))))
     om/IDidUpdate
     (did-update [this prev-props prev-state]
@@ -43,3 +45,18 @@
 (om/root slider-widget app-state
   {:target (. js/document (getElementById "slider"))})
 
+(defn visualization-widget
+  [state owner]
+  (reify
+    om/IWillMount
+    (will-mount [this]
+      nil)
+    om/IRender
+    (render [this]
+      (dom/p nil "ciao"))
+    om/IDidUpdate
+    (did-update [this prev-props prev-state]
+      nil)))
+
+(om/root visualization-widget app-state
+  {:target (. js/document (getElementById "visualization"))})

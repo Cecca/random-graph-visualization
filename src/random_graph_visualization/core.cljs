@@ -3,9 +3,11 @@
             [random-graph-visualization.render :refer [render-graph
                                                        create-force-layout
                                                        create-svg]]
+            [cljs.core.async :as async :refer [<! >! timeout]]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [om.widget.slider :refer [slider]]))
+            [om.widget.slider :refer [slider]])
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (enable-console-print!)
 
@@ -30,17 +32,17 @@
   (reify
     om/IWillMount
     (will-mount [_]
-      nil)
+      (go-loop []
+        (om/update! data [:avg-deg] (:val (om/get-state owner)))
+        (<! (timeout 2000))
+        (recur)))
     om/IRenderState
     (render-state [this {:keys [val]}]
       (dom/p nil
              (dom/p nil (str "Average degree: " (:avg-deg data)))
              (slider :val owner
                      :step nil ; continuous 
-                     :max (dec (:num-nodes data)))))
-    om/IDidUpdate
-    (did-update [this prev-props prev-state]
-      (om/update! data [:avg-deg] (:val prev-state)))))
+                     :max (dec (:num-nodes data)))))))
 
 (om/root slider-widget app-state
   {:target (. js/document (getElementById "slider"))})

@@ -11,14 +11,6 @@
       (.links (aget graph "links"))
       .start))
 
-(defn create-force-layout
-  [width height]
-  (-> js/d3 .-layout
-      (.force)
-      (.charge -120)
-      (.linkDistance 30)
-      (.size (array width height))))
-
 (def margin {:top 50
              :bottom 50
              :left 50
@@ -35,13 +27,6 @@
       (.attr "id" "drawing-area")
       (.attr "transform"
              (str "translate(" (:left margin) "," (:top margin) ")"))))
-
-(defn start-force-layout
-  [force graph]
-  (-> force
-      (.nodes (aget graph "nodes"))
-      (.links (aget graph "links"))
-      .start))
 
 (defn create-links
   [svg graph]

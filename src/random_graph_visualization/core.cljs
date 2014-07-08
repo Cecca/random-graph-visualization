@@ -65,8 +65,6 @@
          {:target (. js/document (getElementById "controls"))})
 
 (create-svg 200 100)
-(def force-layout
-  (create-force-layout 200 100))
 
 (defn visualization-widget
   [state owner]

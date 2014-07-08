@@ -64,7 +64,7 @@
         (.attr "cy" #(aget % "y")))))
 
 (defn render-graph
-  [force svg graph]
+  [svg graph]
   (let [json-graph (clj->js graph)
         force (force-layout json-graph 200 100)
         links (create-links svg json-graph)

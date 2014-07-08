@@ -1,7 +1,6 @@
 (ns random-graph-visualization.core
   (:require [random-graph-visualization.graph :refer [graph-gnp poisson-graph]]
             [random-graph-visualization.render :refer [render-graph
-                                                       create-force-layout
                                                        create-svg]]
             [cljs.core.async :as async :refer [<! >! timeout]]
             [om.core :as om :include-macros true]
@@ -72,7 +71,6 @@
     om/IWillMount
     (will-mount [this]
       (render-graph
-       force-layout
        (.select js/d3 "#drawing-area")
        (:graph state)))
     om/IRender
@@ -82,7 +80,6 @@
     (did-update [this prev-props prev-state]
       (println "Updating graph")
       (render-graph
-       force-layout
        (.select js/d3 "#drawing-area")
        (:graph state)))))
 

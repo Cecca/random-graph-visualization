@@ -32,24 +32,42 @@
   [svg graph]
   (-> svg
       (.selectAll ".link")
-      (.data (aget graph "links"))
-      (.enter)
-      (.append "line")
-      (.attr "class" "link")
-      (.style "stroke-width" 1)))
+      (.remove))
+  (let [links (-> svg
+                  (.selectAll ".link")
+                  (.data (aget graph "links")))]
+    (-> links
+        (identity))
+    (-> links
+        (.enter)
+        (.append "line")
+        (.attr "class" "link")
+        (.style "stroke-width" 1))
+    #_(-> links
+        (.exit)
+        (.remove))))
 
 (defn create-nodes
   [svg force graph]
   (-> svg
       (.selectAll ".node")
-      (.data (aget graph "nodes"))
-      (.enter)
-      (.append "circle")
-      (.attr "class" "node")
-      (.attr "r" 5)
-      (.attr "data-n" #(:id %))
-      (.style "fill" "cyan")
-      (.call (aget force "drag"))))
+      (.remove))
+  (let [nodes (-> svg
+                  (.selectAll ".node")
+                  (.data (aget graph "nodes")))]
+    (-> nodes
+        (identity))
+    (-> nodes
+        (.enter)
+        (.append "circle")
+        (.attr "class" "node")
+        (.attr "r" 5)
+        (.attr "data-n" #(:id %))
+        (.style "fill" "cyan")
+        (.call (aget force "drag")))
+    #_(-> nodes
+        (.exit)
+        (.remove))))
 
 (defn on-tick-handler
   [links nodes]

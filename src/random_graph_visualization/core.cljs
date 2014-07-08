@@ -18,7 +18,7 @@
            "Old value:" (:old-value state-map) "\n"
            "New value:" (:new-value state-map)))
 
-(def app-state (atom {:graph (poisson-graph 100 1)
+(def app-state (atom {:graph {:nodes [] :links []}
                       :avg-deg 0.0
                       :num-nodes 100}))
 
@@ -30,9 +30,12 @@
   [state nodes deg]
   (om/transact! state []
                 (fn [old-state]
-                  {:avg-deg deg
-                   :num-nodes nodes
-                   :graph (poisson-graph nodes deg)})))
+                  (if (and (= nodes (:num-nodes old-state))
+                           (= deg (:avg-deg old-state)))
+                    old-state
+                    {:avg-deg deg
+                     :num-nodes nodes
+                     :graph (poisson-graph nodes deg)}))))
 
 (defn controls-widget
   [state owner]
@@ -59,17 +62,19 @@
                           nil)))))
 
 (om/root controls-widget app-state
-         {:target (. js/document (getElementById "controls"))
-          :tx-listen #(state-logger "filter-view" %)})
+         {:target (. js/document (getElementById "controls"))})
+
+(create-svg 200 100)
+(def force-layout
+  (create-force-layout 200 100))
 
 (defn visualization-widget
   [state owner]
   (reify
     om/IWillMount
     (will-mount [this]
-      (create-svg 800 700)
       (render-graph
-       (create-force-layout 800 700)
+       force-layout
        (.select js/d3 "#drawing-area")
        (:graph state)))
     om/IRender
@@ -77,13 +82,12 @@
       (dom/div nil (str "Average degree is " (:avg-deg state))))
     om/IDidUpdate
     (did-update [this prev-props prev-state]
-      (comment)
       (println "Updating graph")
       (render-graph
-       (create-force-layout 800 700)
+       force-layout
        (.select js/d3 "#drawing-area")
-       (:graph prev-props)))))
+       (:graph state)))))
 
-(comment
-  (om/root visualization-widget app-state
-           {:target (. js/document (getElementById "visualization"))}))
+(om/root visualization-widget app-state
+         {:target (. js/document (getElementById "visualization"))
+          :tx-listen #(println "State transition")})

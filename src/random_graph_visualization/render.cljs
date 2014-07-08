@@ -16,7 +16,7 @@
 (defn create-svg
   [width height]
   (-> js/d3
-      (.select "body")
+      (.select "#svg-container")
       (.append "svg")
       (.attr "width" (+ (:left margin) width (:right margin))) 
       (.attr "height" (+ (:bottom margin) height (:top margin)))

@@ -1,5 +1,16 @@
 (ns random-graph-visualization.render)
 
+(defn force-layout
+  [graph w h]
+  (-> js/d3 .-layout
+      (.force)
+      (.charge -120)
+      (.linkDistance 30)
+      (.size (array w h))
+      (.nodes (aget graph "nodes"))
+      (.links (aget graph "links"))
+      .start))
+
 (defn create-force-layout
   [width height]
   (-> js/d3 .-layout
@@ -69,10 +80,9 @@
 
 (defn render-graph
   [force svg graph]
-  (let [json-graph (clj->js graph)]
-    (println graph)
-    (start-force-layout force json-graph)
-    (let [links (create-links svg json-graph)
-          nodes (create-nodes svg force json-graph)]
-      (.on force "tick" (on-tick-handler links nodes)))))
+  (let [json-graph (clj->js graph)
+        force (force-layout json-graph 200 100)
+        links (create-links svg json-graph)
+        nodes (create-nodes svg force json-graph)]
+    (.on force "tick" (on-tick-handler links nodes))))
 

@@ -41,24 +41,30 @@
   (reify
     om/IRender
     (render [this]
-      (dom/div nil
-               (dom/input #js {:type "number"
-                               :id "nodes-input"
-                               :name "nodes"
-                               :min 0}
-                          nil)
-               (dom/input #js {:type "number"
-                               :id "degree-input"
-                               :name "average-degree"
-                               :min 0}
-                          nil)
-               (dom/input #js {:type "button"
+      (dom/span nil
+               (dom/div
+                nil
+                (dom/label #js {:for "nodes-input"} "Nodes")
+                (dom/input #js {:type "number"
+                                :id "nodes-input"
+                                :name "nodes"
+                                :min 0}
+                           nil))
+               (dom/div
+                nil
+                (dom/label #js {:for "degree-input"} "Average degree")
+                (dom/input #js {:type "number"
+                                :id "degree-input"
+                                :name "average-degree"
+                                :min 0}
+                           nil))
+               (dom/button #js {:type "button"
                                :onClick
                                #(input-state-updater
                                  state
                                  (get-input-value "nodes-input")
                                  (get-input-value "degree-input"))}
-                          nil)))))
+                          "Render!")))))
 
 (om/root controls-widget app-state
          {:target (. js/document (getElementById "controls"))})

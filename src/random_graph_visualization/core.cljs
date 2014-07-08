@@ -11,40 +11,56 @@
 
 (enable-console-print!)
 
-(def app-state (atom {:graph (poisson-graph 10 2)
+(defn state-logger
+  [name state-map]
+  (println name "=================\n"
+           "Update path:" (:path state-map) "\n"
+           "Old value:" (:old-value state-map) "\n"
+           "New value:" (:new-value state-map)))
+
+(def app-state (atom {:graph (poisson-graph 100 1)
                       :avg-deg 0.0
                       :num-nodes 100}))
 
-(comment
-  (def rnd-graph
-    (graph-gnp 10 0.1))
+(defn get-input-value
+  [id]
+  (.-value (. js/document (getElementById id))))
 
-  (let [width 800
-        height 700]
-    (render-graph
-     (create-force-layout width height)
-     (create-svg width height)
-     rnd-graph)))
+(defn input-state-updater
+  [state nodes deg]
+  (om/transact! state []
+                (fn [old-state]
+                  {:avg-deg deg
+                   :num-nodes nodes
+                   :graph (poisson-graph nodes deg)})))
 
-(defn slider-widget
-  [data owner]
+(defn controls-widget
+  [state owner]
   (reify
-    om/IWillMount
-    (will-mount [_]
-      (go-loop []
-        (om/update! data [:avg-deg] (:val (om/get-state owner)))
-        (<! (timeout 2000))
-        (recur)))
-    om/IRenderState
-    (render-state [this {:keys [val]}]
-      (dom/p nil
-             (dom/p nil (str "Average degree: " (:avg-deg data)))
-             (slider :val owner
-                     :step nil ; continuous 
-                     :max (dec (:num-nodes data)))))))
+    om/IRender
+    (render [this]
+      (dom/div nil
+               (dom/input #js {:type "number"
+                               :id "nodes-input"
+                               :name "nodes"
+                               :min 0}
+                          nil)
+               (dom/input #js {:type "number"
+                               :id "degree-input"
+                               :name "average-degree"
+                               :min 0}
+                          nil)
+               (dom/input #js {:type "button"
+                               :onClick
+                               #(input-state-updater
+                                 state
+                                 (get-input-value "nodes-input")
+                                 (get-input-value "degree-input"))}
+                          nil)))))
 
-(om/root slider-widget app-state
-  {:target (. js/document (getElementById "slider"))})
+(om/root controls-widget app-state
+         {:target (. js/document (getElementById "controls"))
+          :tx-listen #(state-logger "filter-view" %)})
 
 (defn visualization-widget
   [state owner]
@@ -68,5 +84,6 @@
        (.select js/d3 "#drawing-area")
        (:graph prev-props)))))
 
-(om/root visualization-widget app-state
-  {:target (. js/document (getElementById "visualization"))})
+(comment
+  (om/root visualization-widget app-state
+           {:target (. js/document (getElementById "visualization"))}))

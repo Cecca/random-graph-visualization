@@ -69,7 +69,7 @@
 (om/root controls-widget app-state
          {:target (. js/document (getElementById "controls"))})
 
-(create-svg 200 100)
+(create-svg (.-innerWidth js/window) (.-innerHeight js/window))
 
 (defn visualization-widget
   [state owner]

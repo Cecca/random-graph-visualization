@@ -26,7 +26,7 @@
       (.append "g")
       (.attr "id" "drawing-area")
       (.attr "transform"
-             (str "translate(" (:left margin) "," (:top margin) ")"))))
+             (str "translate(" (/ width 2) "," (/ height 2) ")"))))
 
 (defn create-links
   [svg graph]

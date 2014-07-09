@@ -21,6 +21,25 @@
                       :avg-deg 0.0
                       :num-nodes 0}))
 
+(defn log-slider
+  [minp maxp minv maxv pos]
+  (if (zero? pos)
+    0
+    (let [log-minv (.log js/Math minv)
+          log-maxv (.log js/Math maxv)
+          scale (/ (- log-maxv log-minv)
+                   (- maxp minp))]
+      (.exp js/Math (+ log-minv (* scale (- pos minp)))))))
+
+(defn log-position
+  [minp maxp minv maxv value]
+  (let [log-minv (.log js/Math minv)
+        log-maxv (.log js/Math maxv)
+        scale (/ (- log-maxv log-minv)
+                 (- maxp minp))]
+    (/ (- (.log js/Math value) log-minv)
+       (+ scale minp))))
+
 (defn get-input-value
   [id]
   (.-value (. js/document (getElementById id))))
@@ -61,12 +80,17 @@
                 (dom/input #js {:type "range"
                                 :id "degree-slider"
                                 :min 0
-                                :max (:num-nodes state)
+                                :max 100
                                 :step 0.001
                                 :onMouseUp #(input-state-updater
                                              state
                                              (:num-nodes @state)
-                                             (get-input-value "degree-slider"))}))
+                                             (log-slider
+                                              0
+                                              100
+                                              0.001
+                                              (:num-nodes @state)
+                                              (get-input-value "degree-slider")))}))
                (dom/span nil (str "Average degree " (:avg-deg state)))))))
 
 (om/root controls-widget app-state

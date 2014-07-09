@@ -66,7 +66,8 @@
                                 :onMouseUp #(input-state-updater
                                              state
                                              (:num-nodes @state)
-                                             (get-input-value "degree-slider"))}))))))
+                                             (get-input-value "degree-slider"))}))
+               (dom/span nil (str "Average degree " (:avg-deg state)))))))
 
 (om/root controls-widget app-state
          {:target (. js/document (getElementById "controls"))})

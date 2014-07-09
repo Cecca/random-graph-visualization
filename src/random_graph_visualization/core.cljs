@@ -58,11 +58,6 @@
                (dom/div
                 #js {:className "input-div"}
                 (dom/label #js {:for "degree-slider"} "Average degree")
-                #_(dom/input #js {:type "number"
-                                :id "degree-input"
-                                :name "average-degree"
-                                :min 0}
-                             nil)
                 (dom/input #js {:type "range"
                                 :id "degree-slider"
                                 :min 0
@@ -71,14 +66,7 @@
                                 :onMouseUp #(input-state-updater
                                              state
                                              (:num-nodes @state)
-                                             (get-input-value "degree-slider"))}))
-               (dom/button #js {:type "button"
-                               :onClick
-                               #(input-state-updater
-                                 state
-                                 (get-input-value "nodes-input")
-                                 (get-input-value "degree-input"))}
-                          "Render!")))))
+                                             (get-input-value "degree-slider"))}))))))
 
 (om/root controls-widget app-state
          {:target (. js/document (getElementById "controls"))})

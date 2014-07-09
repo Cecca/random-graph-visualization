@@ -50,7 +50,7 @@
                                 :name "nodes"
                                 :min 0}
                            nil))
-               (dom/div #js {:className "spacer"} nil)
+               
                (dom/div
                 #js {:className "input-div"}
                 (dom/label #js {:for "degree-input"} "Average degree")
@@ -59,7 +59,7 @@
                                 :name "average-degree"
                                 :min 0}
                            nil))
-               (dom/div #js {:className "spacer"} nil)
+               
                (dom/button #js {:type "button"
                                :onClick
                                #(input-state-updater
@@ -83,7 +83,7 @@
        (:graph state)))
     om/IRender
     (render [this]
-      (dom/div nil (str "Average degree is " (:avg-deg state))))
+      (dom/div nil nil))
     om/IDidUpdate
     (did-update [this prev-props prev-state]
       (println "Updating graph")

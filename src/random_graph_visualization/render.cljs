@@ -21,11 +21,11 @@
   (-> js/d3
       (.select "#svg-container")
       (.append "svg")
-      (.attr "width" (+ (:left margin) width (:right margin))) 
-      (.attr "height" (+ (:bottom margin) height (:top margin)))
+      (.attr "width" width) 
+      (.attr "height" height)
       (.append "g")
       (.attr "id" "drawing-area")
-      (.attr "transform"
+      #_(.attr "transform"
              (str "translate(" (/ width 2) "," (/ height 2) ")"))))
 
 (defn create-links
@@ -105,7 +105,7 @@
 (defn render-graph
   [svg graph]
   (let [json-graph (clj->js (assoc-positions graph))
-        force (force-layout json-graph 200 100)
+        force (force-layout json-graph 1000 320)
         links (create-links svg json-graph)
         nodes (create-nodes svg force json-graph)]
     (.on force "tick" (on-tick-handler links nodes))

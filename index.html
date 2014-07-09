@@ -14,15 +14,24 @@
       label {
         padding-right: 5px;
       }
+
+      fill {
+        min-height: 100%;
+      }
     </style>
     <link rel="stylesheet" 
-          href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+          href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
   </head>
   <body>
 
-    <div class="col-md-12" id="controls"></div>
-    <div id="visualization"></div>
-    <div class="container" id="svg-container"></div>
+    <div class="container">
+      <div class="col-md-12" id="controls"></div>
+      <div id="visualization"></div>
+      <div class="fill col-md-12" id="svg-container"></div>
+    </div>
 
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="out/goog/base.js" type="text/javascript"></script>

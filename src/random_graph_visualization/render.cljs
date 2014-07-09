@@ -81,11 +81,35 @@
         (.attr "cx" #(aget % "x"))
         (.attr "cy" #(aget % "y")))))
 
+;; Since we are using om, I guess this is kind of an anti-pattern.
+;; However, putting the current force layout in the global state would
+;; trigger an endless rerendering cycle. So, if someone has a better
+;; idea, please email me :-)
+(def cur-force (atom nil))
+
+(defn assoc-positions
+  [graph]
+  (if @cur-force
+    (do
+      (println (.nodes @cur-force))
+      (let [{:keys [nodes links]} graph
+            update-fun (fn [n force-n])
+            updated-nodes (map merge nodes
+                               (concat
+                                (js->clj (.nodes @cur-force))
+                                (repeat {})))]
+        {:nodes updated-nodes
+         :links links}))
+    graph))
+
 (defn render-graph
   [svg graph]
-  (let [json-graph (clj->js graph)
+  (println "rendering graph")
+  (let [json-graph (clj->js (assoc-positions graph))
+        _ (println "remapped graph")
         force (force-layout json-graph 200 100)
         links (create-links svg json-graph)
         nodes (create-nodes svg force json-graph)]
-    (.on force "tick" (on-tick-handler links nodes))))
+    (.on force "tick" (on-tick-handler links nodes))
+    (reset! cur-force force)))
 

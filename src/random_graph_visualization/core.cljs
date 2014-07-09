@@ -111,7 +111,6 @@
       (dom/div nil nil))
     om/IDidUpdate
     (did-update [this prev-props prev-state]
-      (println "Updating graph")
       (render-graph
        (.select js/d3 "#drawing-area")
        (:graph state)))))

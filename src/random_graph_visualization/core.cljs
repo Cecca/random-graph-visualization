@@ -76,7 +76,8 @@
                
                (dom/div
                 #js {:className "input-div"}
-                (dom/label #js {:for "degree-slider"} "Average degree")
+                (dom/label #js {:for "degree-slider"}
+                           (str "Average degree: " (:avg-deg state)))
                 (dom/input #js {:type "range"
                                 :id "degree-slider"
                                 :min 0
@@ -90,8 +91,7 @@
                                               100
                                               0.001
                                               (:num-nodes @state)
-                                              (get-input-value "degree-slider")))}))
-               (dom/span nil (str "Average degree " (:avg-deg state)))))))
+                                              (get-input-value "degree-slider")))}))))))
 
 (om/root controls-widget app-state
          {:target (. js/document (getElementById "controls"))})

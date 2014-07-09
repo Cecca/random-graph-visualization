@@ -25,8 +25,8 @@
       (.attr "height" height)
       (.append "g")
       (.attr "id" "drawing-area")
-      #_(.attr "transform"
-             (str "translate(" (/ width 2) "," (/ height 2) ")"))))
+      (.attr "transform"
+             (str "translate(" 0 "," (/ height 2) ")"))))
 
 (defn create-links
   [svg graph]

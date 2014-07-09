@@ -74,24 +74,24 @@
                                             (:avg-deg @state))}
                            nil))
                
-               (dom/div
-                #js {:className "input-div"}
-                (dom/label #js {:for "degree-slider"}
-                           (str "Average degree: " (:avg-deg state)))
-                (dom/input #js {:type "range"
-                                :id "degree-slider"
-                                :min 0
-                                :max 100
-                                :step 0.001
-                                :onMouseUp #(input-state-updater
-                                             state
+               #_(dom/div
+                 #js {:className "input-div"})
+               (dom/label #js {:for "degree-slider"}
+                          (str "Average degree: " (:avg-deg state)))
+               (dom/input #js {:type "range"
+                               :id "degree-slider"
+                               :min 0
+                               :max 100
+                               :step 0.001
+                               :onMouseUp #(input-state-updater
+                                            state
+                                            (:num-nodes @state)
+                                            (log-slider
+                                             0
+                                             100
+                                             0.001
                                              (:num-nodes @state)
-                                             (log-slider
-                                              0
-                                              100
-                                              0.001
-                                              (:num-nodes @state)
-                                              (get-input-value "degree-slider")))}))))))
+                                             (get-input-value "degree-slider")))})))))
 
 (om/root controls-widget app-state
          {:target (. js/document (getElementById "controls"))})

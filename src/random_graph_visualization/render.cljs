@@ -105,7 +105,7 @@
 (defn render-graph
   [svg graph]
   (let [json-graph (clj->js (assoc-positions graph))
-        force (force-layout json-graph 1000 320)
+        force (force-layout json-graph 1000 1)
         links (create-links svg json-graph)
         nodes (create-nodes svg force json-graph)]
     (.on force "tick" (on-tick-handler links nodes))

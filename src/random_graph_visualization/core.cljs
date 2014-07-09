@@ -57,18 +57,21 @@
                
                (dom/div
                 #js {:className "input-div"}
-                (dom/label #js {:for "degree-input"} "Average degree")
-                (dom/input #js {:type "number"
+                (dom/label #js {:for "degree-slider"} "Average degree")
+                #_(dom/input #js {:type "number"
                                 :id "degree-input"
                                 :name "average-degree"
                                 :min 0}
-                           nil))
-               (dom/input #js {:type "range"
-                               :id "degree-slider"
-                               :min 0
-                               :max (:num-nodes state)
-                               :step 0.001
-                               :onMouseUp #(println (get-input-value "degree-slider"))})
+                             nil)
+                (dom/input #js {:type "range"
+                                :id "degree-slider"
+                                :min 0
+                                :max (:num-nodes state)
+                                :step 0.001
+                                :onMouseUp #(input-state-updater
+                                             state
+                                             (:num-nodes @state)
+                                             (get-input-value "degree-slider"))}))
                (dom/button #js {:type "button"
                                :onClick
                                #(input-state-updater

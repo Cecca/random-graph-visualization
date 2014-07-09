@@ -104,9 +104,7 @@
 
 (defn render-graph
   [svg graph]
-  (println "rendering graph")
   (let [json-graph (clj->js (assoc-positions graph))
-        _ (println "remapped graph")
         force (force-layout json-graph 200 100)
         links (create-links svg json-graph)
         nodes (create-nodes svg force json-graph)]

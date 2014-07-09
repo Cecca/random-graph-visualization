@@ -48,7 +48,11 @@
                 (dom/input #js {:type "number"
                                 :id "nodes-input"
                                 :name "nodes"
-                                :min 0}
+                                :min 0
+                                :onChange #(input-state-updater
+                                            state
+                                            (get-input-value "nodes-input")
+                                            (:avg-deg @state))}
                            nil))
                
                (dom/div

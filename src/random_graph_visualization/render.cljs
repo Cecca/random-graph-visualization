@@ -4,7 +4,7 @@
   [graph w h]
   (-> js/d3 .-layout
       (.force)
-      (.charge -120)
+      (.charge -80)
       (.linkDistance 30)
       (.size (array w h))
       (.nodes (aget graph "nodes"))

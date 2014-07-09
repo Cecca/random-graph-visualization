@@ -19,7 +19,7 @@
 
 (def app-state (atom {:graph {:nodes [] :links []}
                       :avg-deg 0.0
-                      :num-nodes 100}))
+                      :num-nodes 0}))
 
 (defn get-input-value
   [id]
@@ -59,7 +59,12 @@
                                 :name "average-degree"
                                 :min 0}
                            nil))
-               
+               (dom/input #js {:type "range"
+                               :id "degree-slider"
+                               :min 0
+                               :max (:num-nodes state)
+                               :step 0.001
+                               :onMouseUp #(println (get-input-value "degree-slider"))})
                (dom/button #js {:type "button"
                                :onClick
                                #(input-state-updater

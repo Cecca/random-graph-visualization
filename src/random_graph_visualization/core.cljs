@@ -41,23 +41,25 @@
   (reify
     om/IRender
     (render [this]
-      (dom/span nil
+      (dom/fieldset nil
                (dom/div
-                nil
+                #js {:className "input-div"}
                 (dom/label #js {:for "nodes-input"} "Nodes")
                 (dom/input #js {:type "number"
                                 :id "nodes-input"
                                 :name "nodes"
                                 :min 0}
                            nil))
+               (dom/div #js {:className "spacer"} nil)
                (dom/div
-                nil
+                #js {:className "input-div"}
                 (dom/label #js {:for "degree-input"} "Average degree")
                 (dom/input #js {:type "number"
                                 :id "degree-input"
                                 :name "average-degree"
                                 :min 0}
                            nil))
+               (dom/div #js {:className "spacer"} nil)
                (dom/button #js {:type "button"
                                :onClick
                                #(input-state-updater

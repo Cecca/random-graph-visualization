@@ -17,15 +17,29 @@
   [n c]
   (graph-gnp n (/ c (dec n))))
 
-(defn connected-components
+(defn graph->adj
   [graph]
   (let [rev-edges (map (fn [x] {:source (:target x)
                                :target (:source x)})
                        (:links graph))
-        complete-edges (concat rev-edges (:links graph))
-        adj (into {}
-                  (map (fn [[k v]] [k (into #{} (map :target v))])
-                       (group-by :source complete-edges)))]
+        complete-edges (concat rev-edges (:links graph))]
+    (into {}
+          (map (fn [[k v]] [k (into #{} (map :target v))])
+               (group-by :source complete-edges)))))
+
+(defn bfs
+  [v adj]
+  (loop [cc #{}
+        queue (conj clojure.lang.PersistentQueue/EMPTY v)]
+    (if (empty? queue)
+      cc
+      (let [nxt (clojure.set/difference (get adj (peek queue)) cc)]
+        (recur (into cc nxt)
+               (into (pop queue) nxt))))))
+
+(defn connected-components
+  [graph]
+  (let [adj (graph->adj graph)]
     (loop [remaining (:nodes graph)
            cc {}
            i 0]

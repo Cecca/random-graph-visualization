@@ -23,8 +23,11 @@
                                :target (:source x)})
                        (:links graph))
         complete-edges (concat rev-edges (:links graph))
-        _ (println complete-edges)
         adj (into {}
                   (map (fn [[k v]] [k (into #{} (map :target v))])
                        (group-by :source complete-edges)))]
-    adj))
+    (loop [remaining (:nodes graph)
+           cc {}
+           i 0]
+      (if (empty? remaining)
+        cc))))

@@ -40,8 +40,13 @@
 (defn connected-components
   [graph]
   (let [adj (graph->adj graph)]
-    (loop [remaining (:nodes graph)
+    (loop [remaining (into #{} (map :id (:nodes graph)))
            cc {}
            i 0]
       (if (empty? remaining)
-        cc))))
+        cc
+        (let [valid (into #{} (drop-while #(nil? (get adj %)) remaining))
+              c (bfs (first valid) adj)]
+          (recur (clojure.set/difference valid c)
+                 (assoc cc i c)
+                 (inc i)))))))

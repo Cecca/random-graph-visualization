@@ -88,7 +88,10 @@
                                :onInput (fn [v]
                                           (aset
                                            (. js/document (getElementById "range-display"))
-                                           "value" (.-value (.-target v))))
+                                           "value" (log-slider
+                                                    0 100
+                                                    0.001 (:num-nodes @state)
+                                                    (.-value (.-target v)))))
                                :onMouseUp #(input-state-updater
                                             state
                                             (:num-nodes @state)

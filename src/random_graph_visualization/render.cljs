@@ -28,6 +28,8 @@
       (.attr "transform"
              (str "translate(" 0 "," (/ height 2) ")"))))
 
+(def color (.category20 (.-scale js/d3)))
+
 (defn create-links
   [svg graph]
   (-> svg
@@ -42,10 +44,7 @@
         (.enter)
         (.append "line")
         (.attr "class" "link")
-        (.style "stroke-width" 1))
-    #_(-> links
-        (.exit)
-        (.remove))))
+        (.style "stroke-width" 1))))
 
 (defn create-nodes
   [svg force graph]
@@ -63,11 +62,10 @@
         (.attr "class" "node")
         (.attr "r" 5)
         (.attr "data-n" #(:id %))
-        (.style "fill" "cyan")
-        (.call (aget force "drag")))
-    #_(-> nodes
-        (.exit)
-        (.remove))))
+        (.style "fill" #(if-let [c (aget % "component")]
+                          (color c)
+                          "black"))
+        (.call (aget force "drag")))))
 
 (defn on-tick-handler
   [links nodes]
@@ -90,20 +88,19 @@
 (defn assoc-positions
   [graph]
   (if @cur-force
-    (do
-      (println (.nodes @cur-force))
-      (let [{:keys [nodes links]} graph
-            update-fun (fn [n force-n])
-            updated-nodes (map merge nodes
-                               (concat
-                                (js->clj (.nodes @cur-force))
-                                (repeat {})))]
-        {:nodes updated-nodes
-         :links links}))
+    (let [{:keys [nodes links]} graph
+          update-fun (fn [n force-n])
+          updated-nodes (map merge nodes
+                             (concat
+                              (js->clj (.nodes @cur-force))
+                              (repeat {})))]
+      {:nodes updated-nodes
+       :links links})
     graph))
 
 (defn render-graph
   [svg graph]
+  (println graph)
   (let [json-graph (clj->js (assoc-positions graph))
         force (force-layout json-graph 1000 1)
         links (create-links svg json-graph)

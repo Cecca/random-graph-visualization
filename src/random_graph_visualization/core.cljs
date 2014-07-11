@@ -85,6 +85,10 @@
                                :min 0
                                :max 100
                                :step 0.001
+                               :onInput (fn [v]
+                                          (aset
+                                           (. js/document (getElementById "range-display"))
+                                           "value" (.-value (.-target v))))
                                :onMouseUp #(input-state-updater
                                             state
                                             (:num-nodes @state)
@@ -93,7 +97,10 @@
                                              100
                                              0.001
                                              (:num-nodes @state)
-                                             (get-input-value "degree-slider")))})))))
+                                             (get-input-value "degree-slider")))})
+               (dom/output #js {:for "degree-slider"
+                                :id "range-display"}
+                           nil)))))
 
 (om/root controls-widget app-state
          {:target (. js/document (getElementById "controls"))})

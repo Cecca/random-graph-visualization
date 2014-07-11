@@ -1,5 +1,7 @@
 (ns random-graph-visualization.core
-  (:require [random-graph-visualization.graph :refer [graph-gnp poisson-graph]]
+  (:require [random-graph-visualization.graph :refer [graph-gnp
+                                                      poisson-graph
+                                                      poisson-components]]
             [random-graph-visualization.render :refer [render-graph
                                                        create-svg]]
             [cljs.core.async :as async :refer [<! >! timeout]]
@@ -53,7 +55,7 @@
                     old-state
                     {:avg-deg deg
                      :num-nodes nodes
-                     :graph (poisson-graph nodes deg)}))))
+                     :graph (poisson-components nodes deg)}))))
 
 (defn controls-widget
   [state owner]

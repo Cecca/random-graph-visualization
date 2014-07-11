@@ -61,7 +61,7 @@
         (.append "circle")
         (.attr "class" "node")
         (.attr "r" 5)
-        (.attr "data-n" #(:id %))
+        (.attr "data-n" #(aget % "id"))
         (.style "fill" #(if-let [c (aget % "component")]
                           (color c)
                           "black"))

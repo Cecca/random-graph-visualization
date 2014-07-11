@@ -50,3 +50,13 @@
           (recur (clojure.set/difference valid c)
                  (assoc cc i c)
                  (inc i)))))))
+
+(defn poisson-components
+  [n c]
+  (let [graph (poisson-graph n c)
+        cc (connected-components graph)
+        cc-map (apply merge
+                      (flatten (for [[i c] cc]
+                                 (map (fn [x] {x i}) c))))]
+    (assoc graph :nodes (for [v (:nodes graph)]
+                         (assoc v :component (get cc-map (:id v)))))))

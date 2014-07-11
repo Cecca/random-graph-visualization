@@ -30,7 +30,7 @@
 (defn bfs
   [v adj]
   (loop [cc #{}
-        queue (conj clojure.lang.PersistentQueue/EMPTY v)]
+        queue #queue [v]]
     (if (empty? queue)
       cc
       (let [nxt (clojure.set/difference (get adj (peek queue)) cc)]

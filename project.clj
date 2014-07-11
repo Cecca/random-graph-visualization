@@ -16,5 +16,4 @@
               :compiler {
                 :output-to "random_graph_visualization.js"
                 :output-dir "out"
-                :optimizations :none
-                :source-map true}}]})
+                :optimizations :simple}}]})

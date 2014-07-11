@@ -4,11 +4,8 @@
                                                       poisson-components]]
             [random-graph-visualization.render :refer [render-graph
                                                        create-svg]]
-            [cljs.core.async :as async :refer [<! >! timeout]]
             [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]
-            [om.widget.slider :refer [slider]])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+            [om.dom :as dom :include-macros true]))
 
 (enable-console-print!)
 
@@ -133,3 +130,4 @@
 (om/root visualization-widget app-state
          {:target (. js/document (getElementById "visualization"))
           :tx-listen #(println "State transition")})
+

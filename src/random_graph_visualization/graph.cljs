@@ -1,7 +1,6 @@
 (ns random-graph-visualization.graph
   (:require [clojure.set]))
 
-;; TODO: optimize by symmetrizing
 (defn graph-gnp
   [n p]
   (let [node-range (range n)
